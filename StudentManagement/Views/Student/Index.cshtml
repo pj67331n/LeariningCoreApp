@@ -1,0 +1,82 @@
+﻿@model List<StudentManagement.Models.ViewModel.StudentViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<table>
+    <thead>
+        <tr>
+            <td>
+
+            </td>
+            <td>
+                First Name
+            </td>
+            <td>
+                Last Name
+            </td>
+            <td>
+                Date of Birth
+            </td>
+            <td>
+                School Name
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+        <tr>
+            <td>
+                <input type="checkbox" class="selectBox" value="@student.Student.StudentId"> <br>
+            </td>
+            <td>
+               @Html.ActionLink(student.Student.FirstName,"Edit","Student", 
+              routeValues:new{ studentId = student.Student.StudentId})   
+            </td>
+            <td>
+                @student.Student.LastName
+            </td>
+            <td>
+                @student.Student.DateOfBirth
+            </td>
+            <td>
+                @{ 
+                    string schoolName = student.Schools == null || student.Schools.Count == 0 ? "none" : student.Schools[0].School.SchoolName;
+                }
+                @schoolName
+            </td>
+        </tr>
+
+        }
+</tbody>
+    
+</table>
+<input type="button" id="deleteBtn" value="Delete"  />
+<script>
+    
+    $(document).ready(function(){
+        $("#deleteBtn").click(function () {
+            var studentIds = [];
+            $('input.selectBox:checkbox:checked').each(function () {
+                studentIds.push(Number($(this).val()));
+            });
+
+            $.ajax({
+                url: "@Url.Action("Delete", "Student")",
+                type: "GET",
+                //data: data,
+                data: { studentIds },
+                traditional: true,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    window.location.reload();
+                }
+            })
+
+        });
+    });
+</script>

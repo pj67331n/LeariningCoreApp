@@ -1,0 +1,36 @@
+﻿@model StudentManagement.Models.ViewModel.StudentViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<h2>Create Student</h2>
+
+@using (Html.BeginForm("Create", "Student"))
+{
+    <div>
+
+        @Html.HiddenFor(m => m.Student.StudentId)
+        @Html.DisplayNameFor(m => m.Student.FirstName)
+        @Html.TextBoxFor(m => m.Student.FirstName)<br />
+        @Html.DisplayNameFor(m => m.Student.LastName)
+        @Html.TextBoxFor(m => m.Student.LastName)<br />
+        @Html.DisplayNameFor(m => m.Student.DateOfBirth)
+        @Html.TextBoxFor(m => m.Student.DateOfBirth, null, new { @class = "datePicker" })<br />
+
+
+
+        <div>
+            <h3>Schools</h3>
+            @Html.DropDownList("Schools[0].School.SchoolId", new SelectList(ViewBag.Schools, "SchoolId", "SchoolName"), "School")
+        </div>
+        <input type="submit" value="Submit" />
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $(".datePicker").datepicker();
+    })
+
+</script>

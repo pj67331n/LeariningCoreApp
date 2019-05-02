@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace StudentManagement.Controllers
 {
     public class StudentController : Controller
@@ -31,6 +32,10 @@ namespace StudentManagement.Controllers
             }
             return View(result);
         }
+
+
+        // Ajax call for student data 
+       
 
         [HttpPost]
         public IActionResult Edit(StudentViewModel studentViewModel)
@@ -96,15 +101,26 @@ namespace StudentManagement.Controllers
             return RedirectToAction("Index", "Student");
         }
 
-        public IActionResult Delete(int[] studentIds)
+        public IActionResult Delete(List<int> studentIds)
         {
             var removeUsage = db.SchoolStudentUsages.Where(x => studentIds.Contains(x.StudentId));
             db.SchoolStudentUsages.RemoveRange(removeUsage);
             var removeStudent = db.Students.Where(x => studentIds.Contains(x.StudentId));
             db.RemoveRange(removeStudent);
             db.SaveChanges();
-            return Json(1);
+
+            return RedirectToAction("Index", "Student");
         }
+
+        //public IActionResult Delete(int[] studentIds)
+        //{
+        //    var removeUsage = db.SchoolStudentUsages.Where(x => studentIds.Contains(x.StudentId));
+        //    db.SchoolStudentUsages.RemoveRange(removeUsage);
+        //    var removeStudent = db.Students.Where(x => studentIds.Contains(x.StudentId));
+        //    db.RemoveRange(removeStudent);
+        //    db.SaveChanges();
+        //    return Json(1);
+        //}
 
         // private fn
         private List<SchoolCourseViewModel> GetSchools(int studentId)

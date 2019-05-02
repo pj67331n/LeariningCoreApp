@@ -2,63 +2,68 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <h2>Index</h2>
+@using (Html.BeginForm("Delete", "Student"))
+{
+    <table id="studentTable" data-page-length='5'>
+        <thead>
+            <tr>
+                <td></td>
+                <td>
+                    First Name
+                </td>
+                <td>
+                    Last Name
+                </td>
+                <td>
+                    Date of Birth
+                </td>
+                <td>
+                    School Name
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>
+                        @*@Html.CheckBox("Student.StudentId")*@
+                        <input type="checkbox" class="selectBox" value="@student.Student.StudentId" name="studentIds"> <br>
+                    </td>
+                    <td>
+                        @Html.ActionLink(student.Student.FirstName, "Edit", "Student",
+                       routeValues: new { studentId = student.Student.StudentId })
+                    </td>
+                    <td>
+                        @student.Student.LastName
+                    </td>
+                    <td>
+                        @student.Student.DateOfBirth
+                    </td>
+                    <td>
+                        @{
+                            string schoolName = student.Schools == null || student.Schools.Count == 0 ? "none" : student.Schools[0].School.SchoolName;
+                        }
+                        @schoolName
+                    </td>
+                </tr>
 
-<table>
-    <thead>
-        <tr>
-            <td>
+            }
+        </tbody>
+    </table>
+    <input type="submit" id="deleteBtn" value="Delete" />
+}
+@*<table id="studentTable">
 
-            </td>
-            <td>
-                First Name
-            </td>
-            <td>
-                Last Name
-            </td>
-            <td>
-                Date of Birth
-            </td>
-            <td>
-                School Name
-            </td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var student in Model)
-        {
-        <tr>
-            <td>
-                <input type="checkbox" class="selectBox" value="@student.Student.StudentId"> <br>
-            </td>
-            <td>
-               @Html.ActionLink(student.Student.FirstName,"Edit","Student", 
-              routeValues:new{ studentId = student.Student.StudentId})   
-            </td>
-            <td>
-                @student.Student.LastName
-            </td>
-            <td>
-                @student.Student.DateOfBirth
-            </td>
-            <td>
-                @{ 
-                    string schoolName = student.Schools == null || student.Schools.Count == 0 ? "none" : student.Schools[0].School.SchoolName;
-                }
-                @schoolName
-            </td>
-        </tr>
+    </table>*@
 
-        }
-</tbody>
-    
-</table>
-<input type="button" id="deleteBtn" value="Delete"  />
+
 <script>
-    
-    $(document).ready(function(){
-        $("#deleteBtn").click(function () {
+
+    $(document).ready(function () {
+
+        @*$("#deleteBtn").click(function () {
             var studentIds = [];
             $('input.selectBox:checkbox:checked').each(function () {
                 studentIds.push(Number($(this).val()));
@@ -77,6 +82,12 @@
                 }
             })
 
-        });
+        });*@
+
+        $('#studentTable').DataTable( {
+
+        } );
+
+
     });
 </script>
